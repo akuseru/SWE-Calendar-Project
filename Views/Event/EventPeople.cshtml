@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Add People to your event";
+}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jumbotron">
+				<h2>
+					Reserve @Model.Room.Name on @string.Format("{0:D}", Model.Sunday)
+				</h2>
+			</div>
+            <form method="post">
+                <input type="hidden" name="roomid" value="@Model.Room.ID" />
+                <input type="hidden" name="day" value="@string.Format("{0:yyyy-MM-dd}", Model.Sunday)" />
+                <input type="hidden" name="guests" value="@string.Join(",", (Model.Guests as List<ApplicationUser>).Select(i => i.Id))" />
+                <label for="addperson">Add Someone to the event</label>
+                <input type="email" class="form-control" id="addperson" name="addperson" placeholder="Email">
+                <br />
+                <input type="submit" value="Add Someone" class="btn btn-primary" />
+            </form>
+            <form method="get" action="/Event/CreateFinal">
+                <input type="hidden" name="roomid" value="@Model.Room.ID" />
+                <input type="hidden" name="day" value="@string.Format("{0:yyyy-MM-dd}", Model.Sunday)" />
+                <input type="hidden" name="guests" value="@string.Join(",", (Model.Guests as List<ApplicationUser>).Select(i => i.Id))" />
+                    <input type="hidden" name="start" id="startr" />
+                    <input type="hidden" name="end" id="endr" />
+                       <div class="form-group">
+                            <label for="exampleInputEmail1">Start time</label>
+                            <input type="text" class="form-control" id="start" disabled="disabled">
+                       </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">End Time</label>
+                            <input type="text" class="form-control" id="end" name="end" disabled="disabled">
+                        </div>
+                        <input type="submit" value="Create Event" class="btn btn-success" />
+            </form>
+
+
+    @Html.Partial("_calStart")
+        
+            @{
+                var x = 1;
+            var css = String.Format("cal-day-col{1} day-{0} pull-left", x, x != 5 ? " bor" : "");
+            }
+            @* First the room *@
+        <div class="@css">
+            <div class="head" style="margin: 0 15%;"><strong>Room Availability</strong><br>@Model.Room.Name</div>
+            @if(Model.Events != null)
+            {
+                @foreach(var eve in (Model.Events as List<RoomReservation>))
+                {
+                    <div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
+                        <span class="cal-hours">
+                        <span>
+                            <span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+                        </span>
+                        <span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
+                    </div>
+                }
+            }
+        </div>
+
+        @foreach(var guest in (Model.Guests as List<ApplicationUser>))
+        {
+            x++;
+            css = String.Format("cal-day-col{1} day-{0} pull-left", x, x != 5 ? " bor" : "");
+            <div class="@css">
+                <div class="head" style="margin: 0 15%;"><strong>@guest.FirstName @guest.LastName</strong><br></div>
+                @foreach(var eve in (Model.UserEvents as List<CalendarEvent>).Where(i => i.User == guest))
+                {
+                    <div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
+                        <span class="cal-hours">
+                        <span>
+                            <span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+                        </span>
+                        <span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
+                    </div>
+                }
+            </div>
+        }
+    
+@Html.Partial("_calEnd")
+		</div>
+	</div>
+    @section scripts
+    {
+        <script type="text/javascript">
+        var startend = false;
+        $(function() {
+            $(".cal-day-hour-part").click(function(e){
+                console.log($(this).data('value'));
+                if(!startend)
+                {
+                    $("#start").val( $(this).data('value'));
+                    $("#startr").val( $(this).data('value'));
+                    startend = true;
+                }else{
+                    $("#end").val($(this).data('value'));
+                    $("#endr").val($(this).data('value'));
+                    startend = false;
+                }
+            });
+        });
+        </script>
+    }

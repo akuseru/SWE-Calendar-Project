@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "New Room";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1>New Room</h1>
+        <form method="post" action="/Admin/MakeNewRoom">
+            <div class="form-group">
+                <label for="roomselect">Room Name</label>
+                <input class="form-control" type="text" name="name" />
+                <Br />
+                <input type="submit" value="Create Room" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12">
+        <h1>List of Rooms</h1>
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Button</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var r in Model.Rooms)
+            {
+                <tr>
+                    <td>@r.Name</td>
+                    <td><form action="POST" action="/Admin/DeleteRoom">
+                        <input type="hidden" name="id" value="@r.ID" />
+                        <input type="submit" class="btn btn-danger" value="Delete" />
+                    </form></td>
+                </tr>
+            }
+        </tbody>
+    </div>
+</div>

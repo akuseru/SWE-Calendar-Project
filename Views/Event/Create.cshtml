@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Reserve a room";
+}
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jumbotron">
+				<h2>
+					Reserve a room
+				</h2>
+			</div>
+            <form method="get">
+                        <div class="form-group">
+                <label for="roomselect">Select a room</label>
+                <select class="form-control" name="RoomId" id="roomselect">
+                    @foreach(var room in Model.Rooms)
+                    {
+                        string Selected = "";
+                        if(Model.RoomId != default(Guid) && Model.RoomId == room.ID)
+                        {
+                            Selected = "selected";
+                        }
+                        
+                        <option value="@room.ID" selected="@Selected">@room.Name</option>
+                    }
+                </select>
+                <label for="week">Change Date</label>
+                <input class="form-control" name="week" id="week" value="@string.Format("{0:yyyy-MM-dd}", Model.Sunday)" type="date" />
+                <Br />
+                <input type="submit" value="Update View" class="btn btn-success" />
+                </div>
+            </form>
+
+@if(Model.RoomId != default(Guid)) {
+    @Html.Partial("_calStart")
+    var sunday = Model.Sunday;
+
+    @for(var i = 1; i <= 5; i++)
+    {
+        
+            var day = sunday.AddDays(i);
+            var css = String.Format("cal-day-col{1} cal-click-col day-{0} pull-left", i, i != 5 ? " bor" : "");
+
+        <a class="@css" asp-action="EventPeople" asp-controller="Event" asp-route-RoomId="@Model.RoomId" asp-route-day="@string.Format("{0:yyyy-MM-dd}", day)" >
+            <div class="head"><strong>@day.DayOfWeek</strong><br>@string.Format("{0:d MMM}.", day)</div>
+            @if(Model.Events != null)
+            {
+            @foreach(var eve in (Model.Events as List<RoomReservation>).Where(x => x.Start > day && x.End < day.AddDays(1)))
+			{
+				<div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
+                	<span class="cal-hours">
+                	<span>
+						<span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+					</span>
+					<span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
+            	</div>
+			}
+            }
+        </a>
+    }
+    
+@Html.Partial("_calEnd")
+}
+		</div>
+	</div>

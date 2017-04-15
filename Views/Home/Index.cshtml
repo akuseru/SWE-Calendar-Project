@@ -1,0 +1,42 @@
+
+
+@{
+    ViewData["Title"] = "Home";
+}
+<div class="row">
+    <div class="jumbotron">
+        <h2>Your Week at a glance</h2>
+        <form method="get">
+            <input type="date" name="week" id="weekchanger" />
+	        <input type="submit" value="Change Week" class="btn btn-success">
+        </form>
+    </div>
+</div>
+
+ @Html.Partial("_calStart")
+
+@{
+    var sunday = Model.Sunday;
+    
+	var Events = Model.Events as List<CalendarEvent>;
+}
+@for(var i = 1; i <= 5; i++)
+    {
+        
+            var day = sunday.AddDays(i);
+            var css = String.Format("cal-day-col{1} day-{0} pull-left", i, i != 5 ? " bor" : "");
+        <div class="@css">
+            <div class="head"><strong>@day.DayOfWeek</strong><br>@string.Format("{0:d MMM}.", day)</div>
+            @foreach(var eve in Events.Where(x => x.Start >= day && x.Start < day.AddDays(1)))
+			{
+				<div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
+                	<span class="cal-hours">
+                	<span>
+						<span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+					</span>
+					<span>@string.Format("{0:HH:mm}", eve.Start)</span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
+            	</div>
+			}
+        </div>
+    }
+@Html.Partial("_calEnd")
