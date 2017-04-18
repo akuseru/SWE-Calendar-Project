@@ -1,3 +1,7 @@
 sqserver/
 .vscode/
 bin/
+obj/
+*.user
+
+*.userprefs

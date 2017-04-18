@@ -10445,14 +10445,11 @@
       "projectUniqueName": "/Users/adam/Dropbox/school/Software Engineering and Test/cal/cal.csproj",
       "projectName": "cal",
       "projectPath": "/Users/adam/Dropbox/school/Software Engineering and Test/cal/cal.csproj",
-      "outputPath": "/Users/adam/Dropbox/school/Software Engineering and Test/cal/obj/",
+      "outputPath": "/Users/adam/Dropbox/school/Software Engineering and Test/cal/obj",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"
       ],
-      "files": {
-        "lib/netcoreapp1.1/cal.dll": "/Users/adam/Dropbox/school/Software Engineering and Test/cal/bin/placeholder/netcoreapp1.1/cal.dll"
-      },
       "frameworks": {
         "netcoreapp1.1": {
           "projectReferences": {}
