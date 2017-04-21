@@ -3,5 +3,6 @@ sqserver/
 bin/
 obj/
 *.user
+.vs/
 
 *.userprefs

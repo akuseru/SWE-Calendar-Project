@@ -4,6 +4,9 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <UserSecretsId>aspnet-cal-8530A54E-1BC7-4473-89BF-36C3F7A7549C</UserSecretsId>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
+  </PropertyGroup>
 
   <ItemGroup>
     <None Update="cal.db" CopyToOutputDirectory="PreserveNewest" />

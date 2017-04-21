@@ -1,6 +1,8 @@
 
-Microsoft Visual Studio Solution File, Format Version 15.00
-# Visual Studio 2017
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cal", "cal.csproj", "{E6AA16DF-826C-4214-A318-2A23C02C36A2}"
 EndProject
 Global
