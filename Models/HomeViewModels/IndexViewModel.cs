@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace cal.Models.HomeViewModels
@@ -7,5 +7,6 @@ namespace cal.Models.HomeViewModels
     {
         public DateTime Sunday { get; set; }
         public List<CalendarEvent> Events{get;set;}
+        public ApplicationUser User { get; set; }
     }
 }
