@@ -109,22 +109,29 @@ namespace cal.Controllers
 			});
 		}
 
-		public async Task<IActionResult> CreateFinal(DateTime day, Guid RoomId, List<string> guests, string start, string end)
+		public async Task<IActionResult> CreateFinal(DateTime day, Guid RoomId, string guests, string start, string end)
 		{
 			var user = await GetCurrentUserAsync();
 			if (user == null)
 				return Redirect("/");
 
-			var r = await _context.Rooms.FirstOrDefaultAsync(i => i.ID == RoomId);
+			var r = await _context.Rooms.FirstOrDefaultAsync(i => i.ID.Equals(RoomId) );
 			if (r == null)
 				return Redirect("/Event/Create?danger=Room Not Found");
 
+		    List<string> guestsList;
+		    if (!string.IsNullOrEmpty(guests))
+		        guestsList = new List<string>(guests.Replace(" ", "").Split(','));
+		    else
+		        guestsList = new List<string>();
+
+
             //guests + me = 3
-		    if (guests.Count() < 2)
+            if (guestsList.Count() < 2)
 		        return Redirect("/Event/Create?danger=Not enough Participants");
 
             //guests + me = 10
-		    if (guests.Count() > 9)
+		    if (guestsList.Count() > 9)
 		        return Redirect("/Event/Create?danger=Too Many Participants");
 
             var eventStart = day;
@@ -138,7 +145,7 @@ namespace cal.Controllers
 			eventEnd = eventEnd.AddHours(temp[1]);
 
 			var gl = new List<ApplicationUser>();
-			foreach (var s in guests)
+			foreach (var s in guestsList)
 			{
 				var toview = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == s);
 				gl.Add(toview);
@@ -147,7 +154,7 @@ namespace cal.Controllers
 			var success = await _context.CreateEvent(r, user, gl, eventStart, eventEnd);
 
 			if (!success.Item1)
-				return Redirect("/Event/EventPeople?Room=" + r.ID + "&day=" + string.Format("{0:yyyy-M-d dddd}", day) + "&danger="+success.Item2);
+				return Redirect("/Event/EventPeople?RoomId=" + r.ID + "&day=" + string.Format("{0:yyyy-M-d dddd}", day) + "&guests="+ string.Join(",", gl.Select(i => i.Id)) + "&danger="+success.Item2);
 
 			return Redirect("/?msg=Event Created!");
 		}

@@ -108,7 +108,7 @@ namespace cal.Data
 		/// <param name="eventEnd">End.</param>
 		public async Task<Tuple<bool, string>> CreateEvent(Room room, ApplicationUser user, List<ApplicationUser> participants, DateTime eventStart, DateTime eventEnd)
 		{
-			if (eventStart <= eventEnd)
+			if (eventEnd <= eventStart)
 				return new Tuple<bool, string>(false, "End time must be after Start time");
 			var newEvent = new RoomReservation
 			{

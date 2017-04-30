@@ -31,7 +31,9 @@
                             <label for="exampleInputEmail1">End Time</label>
                             <input type="text" class="form-control" id="end" name="end" disabled="disabled">
                         </div>
-                        <input type="submit" value="Create Event" class="btn btn-success" />
+                           <input type="submit" value="Create Event" class="btn btn-success disabled" disabled="disabled" id="eventCreation" />
+
+                      
             </form>
 
 
@@ -46,7 +48,7 @@
             <div class="head" style="margin: 0 15%;"><strong>Room Availability</strong><br>@Model.Room.Name</div>
             @if(Model.Events != null)
             {
-                @foreach(var eve in (Model.Events as List<RoomReservation>))
+                foreach(var eve in (Model.Events as List<RoomReservation>))
                 {
                     <div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
                         <span class="cal-hours">
@@ -54,6 +56,7 @@
                             <span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
                         </span>
                         <span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
+                        </span>
                     </div>
                 }
             }
@@ -69,10 +72,11 @@
                 {
                     <div class="pull-left day-event day-highlight" style="top: 39px;height: 120px;width: 145px;background-color: rgb(250, 227, 227);border-color: rgb(173, 33, 33); z-index: 100;"> 
                         <span class="cal-hours">
-                        <span>
-                            <span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+                            <span>
+                                <span>@string.Format("{0:d MMM}.", eve.Start)</span>, 
+                            </span>
+                            <span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
                         </span>
-                        <span>@string.Format("{0:HH:mm}", eve.Start)/span></span> <a href="#" class="event-item"> <span>@eve.ReservationType</span> </a>
                     </div>
                 }
             </div>
@@ -84,21 +88,31 @@
     @section scripts
     {
         <script type="text/javascript">
-        var startend = false;
-        $(function() {
-            $(".cal-day-hour-part").click(function(e){
-                console.log($(this).data('value'));
-                if(!startend)
-                {
-                    $("#start").val( $(this).data('value'));
-                    $("#startr").val( $(this).data('value'));
-                    startend = true;
-                }else{
-                    $("#end").val($(this).data('value'));
-                    $("#endr").val($(this).data('value'));
-                    startend = false;
-                }
-            });
+            var startend = false;
+            var count = @((Model.Guests as List<ApplicationUser>).Count());
+            function isEmpty(el) {
+                return !$.trim(el);
+            }
+
+            $(function () {
+                $(".cal-day-hour-part").click(function (e) {
+                    console.log($(this).data('value'));
+                    if (!startend) {
+                        $("#start").val($(this).data('value'));
+                        $("#startr").val($(this).data('value'));
+                        startend = true;
+                    } else {
+                        $("#end").val($(this).data('value'));
+                        $("#endr").val($(this).data('value'));
+                        startend = false;
+                    }
+                    console.log(!isEmpty($("#endr").val()), !isEmpty($("#startr").val()), count >= 3);
+                    if (!isEmpty($("#endr").val()) && !isEmpty($("#startr").val()) && count >= 3) {
+                        $("#eventCreation").prop('disabled', false);
+                        $("#eventCreation").removeClass("disabled");
+                    }
+                });
+
         });
         </script>
     }
