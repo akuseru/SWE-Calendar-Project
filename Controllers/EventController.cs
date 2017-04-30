@@ -68,7 +68,8 @@ namespace cal.Controllers
 	    {
 		user
 	    };
-			var events = new List<CalendarEvent>();
+            
+            var events = new List<CalendarEvent>();
 			foreach (var s in guests)
 			{
 				var toview = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == s);
@@ -97,7 +98,15 @@ namespace cal.Controllers
 			if (r == null)
 				return Redirect("/Event/Create?danger=Room Not Found");
 
-			var eventStart = day;
+            //guests + me = 3
+		    if (guests.Count() < 2)
+		        return Redirect("/Event/Create?danger=Not enough Participants");
+
+            //guests + me = 10
+		    if (guests.Count() > 9)
+		        return Redirect("/Event/Create?danger=Too Many Participants");
+
+            var eventStart = day;
 			var eventEnd = day;
 			var temp = start.Split(':').Select(i => int.Parse(i)).ToList();
 			eventStart = eventStart.AddHours(temp[0]);
