@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using cal.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -86,7 +88,7 @@ namespace cal.Data
                     user.PasswordHash = hashed;
 
                     var userStore = new UserStore<ApplicationUser>(context);
-                    var result = userStore.CreateAsync(user);
+                    var result = userStore.CreateAsync(user).GetAwaiter().GetResult();
                 }
             }
 

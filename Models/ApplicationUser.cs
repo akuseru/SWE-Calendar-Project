@@ -11,7 +11,7 @@ namespace cal.Models
         User = 0,
         Administrator = 1,
         AdminAssistant = 2,
-
+        Manager = 3,
     }
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser

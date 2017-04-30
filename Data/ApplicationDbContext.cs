@@ -60,6 +60,7 @@ namespace cal.Data
 		/// <returns>a list of events. If teh user is not allowed to view the forusers events we return an empty set.</returns>
 		public async Task<List<CalendarEvent>> LoadUserEvents(ApplicationUser ForUser, ApplicationUser Me, DateTime week, bool SingleDay = false)
 		{
+ 
 			//reset to sunday to get the events for the week.
 			if (week.DayOfWeek != DayOfWeek.Sunday)
 			{

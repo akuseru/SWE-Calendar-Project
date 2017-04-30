@@ -53,7 +53,7 @@ namespace cal.Controllers
 			}
 		}
 
-		public async Task<IActionResult> EventPeople(DateTime day, Guid RoomId, List<string> guests)
+		public async Task<IActionResult> EventPeople(DateTime day, Guid RoomId, string guests, string addperson = null)
 		{
 			var user = await GetCurrentUserAsync();
 			if (user == null)
@@ -62,17 +62,38 @@ namespace cal.Controllers
 			if (r == null)
 				return Redirect("/Event/Create?danger=Room Not Found");
 
-			if (guests.Contains(user.Id))
-				guests.Remove(user.Id);
+
+		    List<string> guestsList;
+		    if (!string.IsNullOrEmpty(guests))
+		        guestsList = new List<string>(guests.Replace(" ", "").Split(','));
+		    else
+		        guestsList = new List<string>();
+		    
+			if (guestsList.Contains(user.Id))
+			    guestsList.Remove(user.Id);
 			var gl = new List<ApplicationUser>
 	    {
 		user
 	    };
-            
+
+		    if (!string.IsNullOrEmpty(addperson))
+		    {
+		        addperson = addperson.ToUpperInvariant();
+                var addguest = await _userManager.Users.FirstOrDefaultAsync(i => i.NormalizedEmail == addperson);
+		        if (addguest == null)
+		        {
+		            ViewData["danger"] = "User not found";
+		        } else
+		        {
+                    gl.Add(addguest);
+		            ViewData["msg"] = "user added";
+		        }
+		    }
+
             var events = new List<CalendarEvent>();
-			foreach (var s in guests)
+			foreach (var s in guestsList)
 			{
-				var toview = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == s);
+				var toview = await _userManager.Users.FirstAsync(i => i.Id == s);
 				gl.Add(toview);
 				if (await _context.CanView(user, toview))
 				{

@@ -39,6 +39,19 @@
                 @Context.Request.Query["danger"][0]
             </div>
         }
+        @if (ViewData.ContainsKey("danger"))
+        {
+            <div class="alert alert-danger">
+                @ViewData["danger"]
+            </div>
+        }
+        @if (ViewData.ContainsKey("msg"))
+        {
+            <div class="alert alert-info">
+                @ViewData["msg"]
+            </div>
+        }
+
         @if(Context.Request.Query["msg"].Count > 0)
         {
             <div class="alert alert-info">
