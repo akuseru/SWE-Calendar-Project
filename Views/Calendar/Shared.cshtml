@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Calendar Share Settings";
+}
+
+<div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron">
+                <h2>
+                    Other calendars
+                </h2>
+                <form method="post" action="/Calendar/Grant">
+                <input type="text" placeholder="email" name="email">
+                    <input type="button" value="Grant Access" class="btn btn-success">
+                </form>
+            </div>              
+            <div class="row">
+            <div class="col-md-6">
+            <h2>View Someones Calendar</h2>
+            <table class="table table-striped">
+<thead>
+<tr>
+  <th>Firstname</th>
+  <th>Lastname</th>
+  <th>Email</th>
+  <th>Links</th>
+</tr>
+</thead>
+<tbody>
+@foreach(var r in ViewData["SharedWithMe"] as IEnumerable<ApplicationUser>)
+{
+    <tr>
+    <td>@r.FirstName</td>
+    <td>@r.LastName</td>
+    <td>@r.Email</td>
+    <td><form method="get" action="/Home/"><input type="hidden" name="view" value="@r.Id"/> <input type="submit" value="View Calendar" class="btn btn-primary"></form></td>
+    </tr>
+}
+</tbody>
+</table>
+            </div>
+            <div class="col-md-6">
+            <h2>Can view your calendar</h2>
+            <table class="table table-striped">
+<thead>
+<tr>
+  <th>Firstname</th>
+  <th>Lastname</th>
+  <th>Email</th>
+  <th>Links</th>
+</tr>
+</thead>
+<tbody>
+@foreach(var r in ViewData["IShareWith"] as IEnumerable<ApplicationUser>)
+{
+    <tr>
+    <td>@r.FirstName</td>
+    <td>@r.LastName</td>
+    <td>@r.Email</td>
+    <td><form method="sumbit" action="/Calendar/Revoke"><input type="hidden" name="id" value="@r.Id" /><input type="button" value="Revoke" class="btn btn-danger"> </form></td>
+    </tr>
+}
+</tbody>
+</table>
+            </div>
+            </div>
+        </div>
+    </div>

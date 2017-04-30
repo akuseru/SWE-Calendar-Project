@@ -1,11 +1,19 @@
-
-
+﻿
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Home";
+	
+	var userData = await UserManager.GetUserAsync(User);
 }
 <div class="row">
     <div class="jumbotron">
-        <h2>Your Week at a glance</h2>
+		@if(Model.User == userData)
+			{
+                <h2>Your Week at a glance</h2>
+			}
+            else {
+			        <h2>@string.Format("Viewing {0} {1}'s Calendar", @Model.User.FirstName, @Model.User.LastName)</h2>
+			}
         <form method="get">
             <input type="date" name="week" id="weekchanger" />
 	        <input type="submit" value="Change Week" class="btn btn-success">

@@ -12,7 +12,7 @@
     <ul class="nav navbar-nav">
             <li><a asp-area="" asp-controller="Home" asp-action="Index">My Calendar</a></li>
             <li><a asp-area="" asp-controller="Event" asp-action="Create">Create Event</a></li>
-            <li><a asp-area="" asp-controller="Calander" asp-action="Shared">View Other Calendars</a></li>
+            <li><a asp-area="" asp-controller="Calendar" asp-action="Shared">View Other Calendars</a></li>
             @if(userData.Role == UserRole.Administrator)
             {
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>

@@ -26,14 +26,26 @@ namespace cal.Controllers
             _userManager = userManager;
             _context = context;
         }
-        public async Task<IActionResult> Index(string week)
+        public async Task<IActionResult> Index(string week, string view)
         {
             var user = await GetCurrentUserAsync();
             if(user == null)
                 return View("IndexLogin");
             else
             {
-                DateTime WeekOf;
+                ApplicationUser target;
+                if(!string.IsNullOrEmpty(view))
+                {
+                    var _u = _context.Users.FirstOrDefault(i => i.Id == view);
+                    if (_u == null)
+                        return Redirect("/?danger=user not found");
+                    if (! await _context.CanView(user, _u))
+                        return Redirect("/?danger=we are not allowed to view this calendar");
+                    target = _u;
+                } else {
+                    target = user;
+                }
+                    DateTime WeekOf;
                 if(String.IsNullOrEmpty(week))
                     WeekOf = DateTime.Today;
                 else
@@ -44,7 +56,8 @@ namespace cal.Controllers
 
                 return View(new IndexViewModel{
                     Sunday = sunday,
-                    Events = await _context.LoadUserEvents(user, user, sunday),
+                    Events = await _context.LoadUserEvents(target, user, sunday),
+                    User = target
                 });
             }
         }

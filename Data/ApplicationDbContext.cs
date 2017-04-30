@@ -26,6 +26,28 @@ namespace cal.Data
 			base.OnModelCreating(builder);
 		}
 
+        /// <summary>
+        /// get a list of calendars that i have access to
+        /// </summary>
+        /// <returns>The with me.</returns>
+        /// <param name="currentUser">Current user.</param>
+        public async Task<List<ApplicationUser>> SharedWithMe(ApplicationUser currentUser)
+        {
+            if (currentUser.Role == UserRole.AdminAssistant || currentUser.Role == UserRole.Administrator)
+                return await Users.ToListAsync();
+            
+            return Viewers.Where(i => i.Viewer == currentUser).Select(i => i.Owner).ToList();
+        }
+
+        /// <summary>
+        /// get a list of users i share my callender with
+        /// </summary>
+        /// <returns>The hare with.</returns>
+        /// <param name="currentUser">Current user.</param>
+        public async Task<List<ApplicationUser>> IShareWith(ApplicationUser currentUser)
+        {
+            return Viewers.Where(i => i.Owner == currentUser).Select(i => i.Viewer).ToList();
+        }
 
 
 		/// <summary>
