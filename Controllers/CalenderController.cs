@@ -53,7 +53,7 @@ namespace cal.Controllers
                 return Redirect("/");
             var _target = _context.Users.FirstOrDefault(i => i.NormalizedEmail == email.ToUpper());
             if (_target == null)
-                return Redirect("/Calender/Shared?msg=user not found");
+                return Redirect("/Calendar/Shared?msg=user not found");
             if(! await _context.CanView(_target, user))
             {
                 _context.Viewers.Add(new Viewers{
@@ -62,9 +62,9 @@ namespace cal.Controllers
                     ViewType = ViewType.Regular
                 });
                 _context.SaveChanges();
-                return Redirect("/Calender/Shared?msg=Added viewer");
+                return Redirect("/Calendar/Shared?msg=Added viewer");
             }
-            return Redirect("/Calender/Shared?msg=User can already view cal");
+            return Redirect("/Calendar/Shared?msg=User can already view cal");
         }
         [HttpPost]
         public async Task<IActionResult> Revoke(string id)
@@ -75,7 +75,7 @@ namespace cal.Controllers
 
             var _target = _context.Users.FirstOrDefault(i => i.Id == id);
             if(_target == null)
-                return Redirect("/Calender/Shared?msg=user not found");
+                return Redirect("/Calendar/Shared?msg=user not found");
 
             if(await _context.CanView(_target, user))
             {
@@ -86,7 +86,7 @@ namespace cal.Controllers
                     _context.SaveChanges();
                 }
             }
-            return Redirect("/Calender/Shared?msg=ok");
+            return Redirect("/Calendar/Shared?msg=ok");
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync()
