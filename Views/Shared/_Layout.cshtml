@@ -39,6 +39,12 @@
                 @Context.Request.Query["danger"][0]
             </div>
         }
+        @if(Context.Request.Query["msg"].Count > 0)
+        {
+            <div class="alert alert-info">
+                @Context.Request.Query["msg"][0]
+            </div>
+        }
         @RenderBody()
         <hr />
         <footer>

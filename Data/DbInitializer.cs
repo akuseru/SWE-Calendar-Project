@@ -37,7 +37,32 @@ namespace cal.Data
                 var userStore = new UserStore<ApplicationUser>(context);
                 var result = userStore.CreateAsync(Users);
             }
-            
+
+            Users =
+                new ApplicationUser
+                {
+                    FirstName = "Test",
+                    LastName = "Smith",
+                    Role = UserRole.User,
+                    UserName = "test@akuseru.io",
+                    Email = "test@akuseru.io",
+                    NormalizedEmail = "TEST@AKUSERU.IO",
+                    NormalizedUserName = "TEST@AKUSERU.IO",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                };
+
+            if (!context.Users.Any(i => i.UserName == Users.UserName))
+            {
+
+                var password = new PasswordHasher<ApplicationUser>();
+                var hashed = password.HashPassword(Users, "1234");
+                Users.PasswordHash = hashed;
+
+                var userStore = new UserStore<ApplicationUser>(context);
+                var result = userStore.CreateAsync(Users);
+            }
 
         }
     }
