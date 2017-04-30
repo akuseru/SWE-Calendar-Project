@@ -12,33 +12,105 @@ namespace cal.Data
         {
             var context = (ApplicationDbContext)serviceProvider.GetService(typeof(ApplicationDbContext));
             
-            // Look for any students.
-            var Users = 
-                new ApplicationUser{
-                    FirstName="Adam", 
-                    LastName="Smith", 
-                    Role=UserRole.Administrator, 
-                    UserName="adam@akuseru.io", 
-                    Email="adam@akuseru.io",
-                    NormalizedEmail="ADAM@AKUSERU.IO",
-                    NormalizedUserName="ADAM@AKUSERU.IO",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    SecurityStamp = Guid.NewGuid().ToString("D")
-            };
+            #region Populate Test Users
+            var Users = new List<ApplicationUser>
+                {
+                    //Admin
+                    new ApplicationUser
+                    {
+                        FirstName = "Test",
+                        LastName = "Admin",
+                        Role = UserRole.Administrator,
+                        UserName = "adm.drakesystem@gmail.com",
+                        Email = "adm.drakesystem@gmail.com",
+                        NormalizedEmail = "ADM.DRAKESYSTEM@GMAIL.COM",
+                        NormalizedUserName = "ADM.DRAKESYSTEM@GMAIL.COM",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    },
 
-            if (!context.Users.Any(i => i.UserName == Users.UserName))
+                    //AdminAssistant
+                    new ApplicationUser
+                    {
+                        FirstName = "Test",
+                        LastName = "AdminAssistant",
+                        Role = UserRole.AdminAssistant,
+                        UserName = "admassistant.drakesystem@gmail.com",
+                        Email = "admassistant.drakesystem@gmail.com",
+                        NormalizedEmail = "ADMASSISTANT.DRAKESYSTEM@GMAIL.COM",
+                        NormalizedUserName = "ADMASSISTANT.DRAKESYSTEM@GMAIL.COM",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    },
+
+                    //Manager
+                    new ApplicationUser
+                    {
+                        FirstName = "Test",
+                        LastName = "Manager",
+                        Role = UserRole.Manager,
+                        UserName = "manager.drakesystem@gmail.com",
+                        Email = "manager.drakesystem@gmail.com",
+                        NormalizedEmail = "MANAGER.DRAKESYSTEM@GMAIL.COM",
+                        NormalizedUserName = "MANAGER.DRAKESYSTEM@GMAIL.COM",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    },
+
+                    //User
+                    new ApplicationUser
+                    {
+                        FirstName = "Test",
+                        LastName = "User",
+                        Role = UserRole.User,
+                        UserName = "user.drakesystem@gmail.com",
+                        Email = "user.drakesystem@gmail.com",
+                        NormalizedEmail = "USER.DRAKESYSTEM@GMAIL.COM",
+                        NormalizedUserName = "USER.DRAKESYSTEM@GMAIL.COM",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    }
+                };
+               
+            foreach (ApplicationUser user in Users)
             {
-                
-                var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(Users,"secret");
-                Users.PasswordHash = hashed;
+                if (!context.Users.Any(i => i.UserName == user.UserName))
+                {
 
-                var userStore = new UserStore<ApplicationUser>(context);
-                var result = userStore.CreateAsync(Users);
+                    var password = new PasswordHasher<ApplicationUser>();
+                    var hashed = password.HashPassword(user, "drakesystem");
+                    user.PasswordHash = hashed;
+
+                    var userStore = new UserStore<ApplicationUser>(context);
+                    var result = userStore.CreateAsync(user);
+                }
             }
-            
 
+            #endregion
+
+            #region Populate Default Rooms
+            List<string> nameOfDefaultRoomList = new List<string> { "C1", "C2", "C3" };
+
+            foreach (string nameOfDefaultRoom in nameOfDefaultRoomList)
+            {
+                if (!context.Rooms.Any(i => i.Name == nameOfDefaultRoom))
+                {
+                    var room = new Room
+                    {
+                        ID = Guid.NewGuid(),
+                        Name = nameOfDefaultRoom
+                    };
+
+                    context.Rooms.Add(room);
+                    context.SaveChanges();
+                }
+            }
+            #endregion
+            
         }
     }
 }
