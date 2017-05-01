@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using cal.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace cal.Data
 {
@@ -78,6 +77,27 @@ namespace cal.Data
                         SecurityStamp = Guid.NewGuid().ToString("D")
                     }
                 };
+            
+            //Add 9 more test users to test limits on reservation
+            for (int i = 0; i < 9; i++)
+            {
+                Users.Add
+                (
+                    new ApplicationUser
+                    {
+                        FirstName = $"Test{i}",
+                        LastName = $"User{i}",
+                        Role = UserRole.User,
+                        UserName = $"user{i}.drakesystem@gmail.com",
+                        Email = $"user{i}.drakesystem@gmail.com",
+                        NormalizedEmail = $"USER{i}.DRAKESYSTEM@GMAIL.COM",
+                        NormalizedUserName = $"USER{i}.DRAKESYSTEM@GMAIL.COM",
+                        EmailConfirmed = true,
+                        PhoneNumberConfirmed = true,
+                        SecurityStamp = Guid.NewGuid().ToString("D")
+                    }
+                );
+            }
                
             foreach (ApplicationUser user in Users)
             {
